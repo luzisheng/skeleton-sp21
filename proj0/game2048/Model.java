@@ -1,7 +1,5 @@
 package game2048;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Formatter;
 import java.util.Observable;
 
