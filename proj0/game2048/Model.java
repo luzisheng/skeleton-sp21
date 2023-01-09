@@ -174,7 +174,7 @@ public class Model extends Observable {
     /** Returns true if at least one space on the Board is empty.
      *  Empty spaces are stored as null.
      * */
-    public static boolean emptySpaceExists(@NotNull Board b) {
+    public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
         for (int col = 0; col < b.size(); col += 1) {
             for (int row = 0; row < b.size(); row += 1) {
@@ -191,7 +191,7 @@ public class Model extends Observable {
      * Maximum valid value is given by MAX_PIECE. Note that
      * given a Tile object t, we get its value with t.value().
      */
-    public static boolean maxTileExists(@NotNull Board b) {
+    public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
         for (int col = 0; col < b.size(); col += 1) {
             for (int row = 0; row < b.size(); row += 1) {
