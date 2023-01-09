@@ -1,5 +1,7 @@
 package game2048;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Formatter;
 import java.util.Observable;
 
@@ -94,6 +96,35 @@ public class Model extends Observable {
         setChanged();
     }
 
+    /** Process tile in single column. */
+    private boolean moveTile(int col) {
+        boolean changed = false;
+        boolean[] merged = new boolean[board.size()];
+        for (int row = board.size()-2; row >= 0; row -= 1) {
+            Tile t = board.tile(col, row);
+            if (t == null) {
+                continue;
+            }
+            int toRow = row;
+            while (toRow < board.size()-1) {
+                if (board.tile(col, toRow + 1) == null) {
+                    toRow += 1;
+                    continue;
+                } else if (!merged[toRow + 1] && board.tile(col, toRow + 1).value() == t.value()) {
+                    toRow += 1;
+                    merged[toRow] = true;
+                    score += 2 * t.value();
+                }
+                break;
+            }
+            if (toRow != row) {
+                board.move(col, toRow, t);
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
     /** Tilt the board toward SIDE. Return true iff this changes the board.
      *
      * 1. If two Tile objects are adjacent in the direction of motion and have
@@ -113,6 +144,13 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        board.setViewingPerspective(side);
+        for (int col = 0; col < board.size(); col += 1) {
+            if (moveTile(col)) {
+                changed = true;
+            }
+        }
+        board.setViewingPerspective(Side.NORTH);
 
         checkGameOver();
         if (changed) {
@@ -136,8 +174,15 @@ public class Model extends Observable {
     /** Returns true if at least one space on the Board is empty.
      *  Empty spaces are stored as null.
      * */
-    public static boolean emptySpaceExists(Board b) {
+    public static boolean emptySpaceExists(@NotNull Board b) {
         // TODO: Fill in this function.
+        for (int col = 0; col < b.size(); col += 1) {
+            for (int row = 0; row < b.size(); row += 1) {
+                if (b.tile(col, row) == null) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -146,8 +191,15 @@ public class Model extends Observable {
      * Maximum valid value is given by MAX_PIECE. Note that
      * given a Tile object t, we get its value with t.value().
      */
-    public static boolean maxTileExists(Board b) {
+    public static boolean maxTileExists(@NotNull Board b) {
         // TODO: Fill in this function.
+        for (int col = 0; col < b.size(); col += 1) {
+            for (int row = 0; row < b.size(); row += 1) {
+                if (b.tile(col, row) != null && b.tile(col, row).value() == MAX_PIECE) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -159,6 +211,20 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        if (emptySpaceExists(b)) {
+            return true;
+        } else {
+            for (int col = 0; col < b.size(); col += 1) {
+                for (int row = 0; row < b.size(); row += 1) {
+                    if (row + 1 < b.size() && b.tile(col, row).value() == b.tile(col, row+1).value()) {
+                        return true;
+                    }
+                    if (col + 1 < b.size() && b.tile(col, row).value() == b.tile(col+1, row).value()) {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
