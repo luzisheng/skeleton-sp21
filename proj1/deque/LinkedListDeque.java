@@ -100,6 +100,7 @@ public class LinkedListDeque<T> implements Iterable<T> {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) { return true; }
         if (o instanceof LinkedListDeque) {
             if (((LinkedListDeque<T>) o).size() != this.size()) {
                 return false;
@@ -114,6 +115,7 @@ public class LinkedListDeque<T> implements Iterable<T> {
         return false;
     }
 
+    @Override
     public Iterator<T> iterator() {
         return new LinkedListDequeIterator();
     }
@@ -125,10 +127,12 @@ public class LinkedListDeque<T> implements Iterable<T> {
             wizPos = 0;
         }
 
+        @Override
         public boolean hasNext() {
             return wizPos < size;
         }
 
+        @Override
         public T next() {
             T returnItem = get(wizPos);
             wizPos += 1;
