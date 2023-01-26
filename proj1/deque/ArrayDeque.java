@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> implements Iterable<T> {
+public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
 
     private T[] items;
     // size of ArrayDeque
@@ -75,6 +75,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         }
     }
 
+    @Override
     public void addFirst(T item) {
         resize();
         items[nextFirst] = item;
@@ -85,6 +86,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         size = size + 1;
     }
 
+    @Override
     public void addLast(T item) {
         resize();
         items[nextLast] = item;
@@ -95,10 +97,10 @@ public class ArrayDeque<T> implements Iterable<T> {
         size = size + 1;
     }
 
-    public boolean isEmpty() { return (size == 0); }
-
+    @Override
     public int size() { return size; }
 
+    @Override
     public void printDeque() {
         int current = nextFirst + 1;
         while (current != nextLast) {
@@ -110,6 +112,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         }
     }
 
+    @Override
     public T removeFirst() {
         if (size == 0) { return null; }
 
@@ -126,6 +129,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         return removed;
     }
 
+    @Override
     public T removeLast() {
         if (size == 0) { return null; }
 
@@ -142,6 +146,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         return removed;
     }
 
+    @Override
     public T get(int index) {
         if (index >= size) {
             return null;
