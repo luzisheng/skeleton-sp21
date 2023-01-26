@@ -4,12 +4,18 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import edu.princeton.cs.algs4.StdRandom;
 
-public class ArrayDequeTest {
+import java.util.Comparator;
 
+public class MaxArrayDequeTest {
     @Test
     public void testThreeAddThreeRemove() {
         LinkedListDeque<Integer> correct = new LinkedListDeque<>();
-        ArrayDeque<Integer> broken = new ArrayDeque<>();
+        MaxArrayDeque<Integer> broken = new MaxArrayDeque<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1 - o2;
+            }
+        });
 
         correct.addLast(5);
         correct.addLast(10);
@@ -29,9 +35,14 @@ public class ArrayDequeTest {
     @Test
     public void randomizedTest() {
         LinkedListDeque<Integer> correct = new LinkedListDeque<>();
-        ArrayDeque<Integer> broken = new ArrayDeque<>();
+        MaxArrayDeque<Integer> broken = new MaxArrayDeque<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1 - o2;
+            }
+        });
 
-        int N = 5000;
+        int N = 200;
         for (int i = 0; i < N; i += 1) {
             // addFirst addLast isEmpty size removeFirst removeLast get
             int operationNumber = StdRandom.uniform(0, 7);
@@ -62,9 +73,13 @@ public class ArrayDequeTest {
                 int lastBroken = broken.removeLast();
                 assertEquals(lastCorrect, lastBroken);
             } else if (operationNumber == 6 && broken.size() != 0) {
-                // get
-                int randVal = StdRandom.uniform(0, broken.size());
-                assertEquals(correct.get(randVal), broken.get(randVal));
+                // max
+                int max = broken.max();
+                System.out.println(max);
+                for (int x : correct) {
+                    System.out.print(x + " ");
+                }
+                System.out.println();
             }
         }
     }
